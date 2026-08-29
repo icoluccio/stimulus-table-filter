@@ -1,0 +1,39 @@
+<div data-controller="table-filter"
+     data-table-filter-sort-value="title"
+     data-table-filter-dir-value="asc"
+     data-table-filter-filter-value="all"
+     data-table-filter-page-size-value="2"
+     data-table-filter-url-key-value="tf"
+     data-table-filter-debounce-ms-value="300"
+     data-table-filter-match-status-value="active">
+  <input data-table-filter-target="search" type="search">
+  <button data-filter-btn="all">All</button>
+  <button data-filter-btn="active">Active</button>
+  <select data-table-filter-target="filterSelect">
+    <option value="all">All</option>
+    <option value="active">Active</option>
+  </select>
+  <span data-table-filter-target="filterDisplay" hidden></span>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col" data-sort-btn="title">Title</th>
+        <th scope="col" data-sort-btn="amount" data-sort-type="numeric">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-table-filter-target="groupHeader" data-group="category-a">Category A</tr>
+      <tr data-table-filter-target="row" data-name="alpha" data-filter-status="active"   data-sort-amount="8.5" data-sort-title="alpha" data-group="category-a"></tr>
+      <tr data-table-filter-target="row" data-name="beta"  data-filter-status="archived" data-sort-amount="4.0" data-sort-title="beta"></tr>
+      <tr data-table-filter-target="row" data-name="gamma" data-filter-status="draft"    data-sort-amount=""    data-sort-title="gamma"></tr>
+      <tr data-table-filter-target="emptyRow" class="hidden"><td>No results</td></tr>
+    </tbody>
+  </table>
+  <button data-prev-page data-table-filter-target="prevPage">←</button>
+  <span data-table-filter-target="pageInfo"></span>
+  <button data-next-page data-table-filter-target="nextPage">→</button>
+  <span data-table-filter-target="matchCount"></span>
+  <span data-table-filter-target="totalCount"></span>
+  <span data-table-filter-target="matchPct"></span>
+  <span data-count-dimension="status" data-count-value="active"></span>
+</div>

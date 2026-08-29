@@ -1,0 +1,33 @@
+plugins:
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  SuggestExtensions: false
+
+# Engine and ViewHelper are self-documenting by name and purpose
+Style/Documentation:
+  Enabled: false
+
+# View helpers mirror data attributes 1:1 with keyword arguments,
+# so only positional parameters are counted
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
+# Shared examples and matchers specs are behavior descriptions,
+# not class specs
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/stimulus_table_filter/shared_examples_spec.rb'
+    - 'spec/stimulus_table_filter/rspec/matchers_spec.rb'
+
+RSpec/ContextWording:
+  Exclude:
+    - 'spec/support/**/*'
+
+# View helper specs are grouped by feature (container, sort, rows...)
+# under view_helper/ rather than mirroring the module path exactly
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - 'spec/stimulus_table_filter/view_helper/**/*'

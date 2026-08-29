@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  rubocop:
+    name: RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+      - run: bundle exec rubocop lib spec
+      - run: bundle exec rake flay
+
+  javascript:
+    name: JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  rspec:
+    name: RSpec (Ruby ${{ matrix.ruby }}, Rails ${{ matrix.rails }})
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.appraisal }}.gemfile
+    strategy:
+      fail-fast: false
+      matrix:
+        # Rails 7.0 is the logical floor: it matches the gemspec's railties
+        # constraint and is the first Hotwire/Stimulus-era release.
+        include:
+          - { ruby: '3.2', rails: '7.0', appraisal: 'rails_7_0' }
+          - { ruby: '3.2', rails: '7.1', appraisal: 'rails_7_1' }
+          - { ruby: '3.3', rails: '7.1', appraisal: 'rails_7_1' }
+          - { ruby: '3.2', rails: '7.2', appraisal: 'rails_7_2' }
+          - { ruby: '3.3', rails: '7.2', appraisal: 'rails_7_2' }
+          - { ruby: '3.4', rails: '7.2', appraisal: 'rails_7_2' }
+          - { ruby: '3.2', rails: '8.0', appraisal: 'rails_8_0' }
+          - { ruby: '3.3', rails: '8.0', appraisal: 'rails_8_0' }
+          - { ruby: '3.4', rails: '8.0', appraisal: 'rails_8_0' }
+          - { ruby: '3.4', rails: '8.1', appraisal: 'rails_8_1' }
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - run: bundle exec rspec

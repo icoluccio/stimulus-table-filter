@@ -1,0 +1,15 @@
+gemfile: Gemfile
+
+PrePush:
+  ALL:
+    problem_on_unmodified_line: report
+    requires_files: false
+    quiet: false
+
+  RuboCop:
+    enabled: true
+    command: ['bash', '-c', 'bundle exec rubocop lib spec']
+
+  RSpec:
+    enabled: true
+    command: ['bundle', 'exec', 'rspec']
