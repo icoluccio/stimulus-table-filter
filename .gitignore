@@ -1,0 +1,7 @@
+vendor/bundle
+coverage/
+pkg/
+*.gem
+.setting/
+gemfiles/*.gemfile.lock
+node_modules/

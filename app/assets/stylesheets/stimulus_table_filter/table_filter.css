@@ -1,0 +1,8 @@
+/* Required by the JS controller for row/group visibility toggling.
+   Scoped to the controller so the widget doesn't define a global utility class. */
+[data-controller="table-filter"] .hidden { display: none; }
+
+[data-sort-btn] {
+  cursor: pointer;
+  user-select: none;
+}
