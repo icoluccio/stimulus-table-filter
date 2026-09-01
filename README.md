@@ -176,6 +176,7 @@ the controller reads on connect.
 | `page_size:` | `nil` | Rows per page (omit or `0` to disable pagination) |
 | `url_key:` | `nil` | URL param prefix (default `tf`); set per table to namespace multiple tables |
 | `debounce_ms:` | `nil` | Search debounce in ms (default `0` = immediate) |
+| `search:` | `nil` | Initial search text (emits `data-table-filter-search-value`) |
 | `tag:` | `:div` | Wrapping HTML element |
 
 Every helper accepts `**opts` and passes them through to the underlying tag.
@@ -315,6 +316,9 @@ The default footer shows how many rows match the current filter and search, out 
 <!-- renders: <span>12</span> of <span>87</span> -->
 ```
 
+The helper wraps the content in the footer element (a `<tfoot>` by default), a `<tr>`, and a
+`<td>`; `colspan:` applies to that cell and `tag:` replaces only the outer element.
+
 Or build your own footer. The block receives the match-count and total-count spans:
 
 ```erb
@@ -399,11 +403,14 @@ Behavior notes:
 - **Footer stats**: the match count covers every row that passes the active filters and search,
   across all pages. Count tags populate with the number of matching rows whose dimension value
   equals the tag's value.
-- **URL state**: every filter dimension, sort, direction, page and search sync to
-  `URLSearchParams` on every change (dimensions as `tf_filter_{dimension}` params) and the
-  controller restores them on connect. Namespace multiple tables with `data-table-filter-url-key-value`.
+- **URL state**: the controller syncs filter dimensions, sort, direction, page and search to
+  `URLSearchParams` when the user changes them (dimensions as `tf_filter_{dimension}` params)
+  and restores them on connect without rewriting the URL. Namespace multiple tables with
+  `data-table-filter-url-key-value`.
 - **Event handling**: the controller delegates all events itself; individual elements
-  need no `data-action`. `setFilter`, `sortBy` and `search` are also callable programmatically.
+  need no `data-action`. Call `search()` programmatically. For filters and sort, set the
+  Stimulus values and refresh, e.g.
+  `controller.filterDimensionsValue = { status: 'active' }; controller.refresh()`.
 
 ### RSpec shared examples
 

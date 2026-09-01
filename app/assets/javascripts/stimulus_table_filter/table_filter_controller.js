@@ -38,6 +38,7 @@ export default class extends Controller {
 
   connect() {
     this.#readUrlState()
+    if (this.hasSearchTarget && this.searchValue) this.searchTarget.value = this.searchValue
     this.element.addEventListener("click",  this.#onClick)
     this.element.addEventListener("input",  this.#onInput)
     this.element.addEventListener("change", this.#onChange)
