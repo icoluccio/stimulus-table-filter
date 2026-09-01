@@ -46,6 +46,16 @@ RSpec.describe StimulusTableFilter::ViewHelper, '#table_filter_container_tag' do
     expect(result).not_to have_data('table-filter-debounce-ms-value')
   }
 
+  it('omits search value when search is not given') {
+    expect(result).not_to have_data('table-filter-search-value')
+  }
+
+  it('sets search value when search is given') {
+    expect(helper.table_filter_container_tag(search: 'rails') do
+      ''
+    end).to have_data('table-filter-search-value', 'rails')
+  }
+
   it('sets url-key value when url_key is given') {
     expect(helper.table_filter_container_tag(url_key: 'items') do
       ''
