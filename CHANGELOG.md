@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.0] - 2026-10-15
+
+- Add `table_filter_bar_tag`: a search input and optional filter buttons in one toolbar. It
+  raises `StimulusTableFilter::Error` when `filters:` is given without `dimension:`
+
 ## [0.1.1] - 2026-08-31
 
 - `table_filter_container_tag` accepts a `search:` option and emits

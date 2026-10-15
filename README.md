@@ -110,13 +110,8 @@ A complete filterable table in one view partial:
 
 ```erb
 <%= table_filter_container_tag do %>
-  <%# Search + filter bar %>
-  <div>
-    <%= table_filter_search_tag(placeholder: "Search users…") %>
-    <%= table_filter_filter_btn_tag("all",      "All",      dimension: "status") %>
-    <%= table_filter_filter_btn_tag("active",   "Active",   dimension: "status") %>
-    <%= table_filter_filter_btn_tag("archived", "Archived", dimension: "status") %>
-  </div>
+  <%= table_filter_bar_tag(placeholder: "Search users…", dimension: "status",
+        filters: { "all" => "All", "active" => "Active", "archived" => "Archived" }) %>
 
   <table>
     <thead>
@@ -224,6 +219,28 @@ filters. Omit `filters:` and the filter helpers entirely for a search-and-sort-o
 
 Filters rows by matching `data-name`, or `data-searchable` when present. Case-insensitive
 substring match.
+
+### Toolbar
+
+`table_filter_bar_tag` renders the search input and, when `filters:` is given, a group of filter
+buttons inside one `<div>`:
+
+```erb
+<%= table_filter_bar_tag(placeholder: "Search users…", dimension: "status",
+      filters: { "all" => "All", "active" => "Active" },
+      class: "flex gap-2", search: { class: "input" }, group: { class: "join" }, button: { class: "btn" }) %>
+```
+
+| Option | Applies to |
+| --- | --- |
+| `placeholder:` | The search input |
+| `filters:` | `{ value => label }`; one button per entry. Omit it for a search-only bar. No group renders |
+| `dimension:` | The dimension every button acts on. **Required** with `filters:`. Without it the helper raises `StimulusTableFilter::Error` |
+| `search:`, `group:`, `button:` | Extra attributes (`class:`, `data:`, ...) for the input, the button group `<div>` and each button |
+| any other option | The outer `<div>` |
+
+It wraps `table_filter_search_tag` and `table_filter_filter_btn_tag`. Call those directly when
+you need a different layout.
 
 ### Filter buttons
 
