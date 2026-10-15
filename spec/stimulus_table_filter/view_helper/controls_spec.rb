@@ -17,6 +17,46 @@ RSpec.describe StimulusTableFilter::ViewHelper do
     it_behaves_like 'merges caller data', 'data-table-filter-target="search"'
   end
 
+  describe '#table_filter_bar_tag' do
+    let(:filters) { { 'all' => 'All', 'active' => 'Active' } }
+    let(:bar) do
+      helper.table_filter_bar_tag(placeholder: 'Search…', filters: filters, dimension: 'status', class: 'toolbar',
+                                  search: { class: 'input' }, group: { class: 'join' }, button: { class: 'btn' })
+    end
+
+    it('wraps the controls in a container with the given options') {
+      expect(bar).to include('<div class="toolbar">')
+    }
+
+    it('renders the search input with its placeholder and options') {
+      expect(bar).to include('placeholder="Search…"').and include('class="input"')
+    }
+
+    it('renders one filter button per value inside the group') {
+      expect(bar).to include('<div class="join">').and include('data-filter-btn="all"')
+        .and include('data-filter-btn="active"')
+    }
+
+    it('scopes the buttons to the dimension') {
+      expect(bar.scan('data-filter-dimension="status"').size).to eq(2)
+    }
+
+    it('omits the button group when there are no filters') {
+      expect(helper.table_filter_bar_tag(placeholder: 'Search…')).not_to include('data-filter-btn')
+    }
+
+    it('raises when filters are given without a dimension') {
+      expect { helper.table_filter_bar_tag(filters: filters) }
+        .to raise_error(StimulusTableFilter::Error, /requires dimension:/)
+    }
+
+    it('merges caller data on the search input and buttons') {
+      html = helper.table_filter_bar_tag(filters: filters, dimension: 'status',
+                                         search: { data: { a: 'x' } }, button: { data: { b: 'y' } })
+      expect(html).to include('data-a="x"').and include('data-b="y"').and include('data-table-filter-target="search"')
+    }
+  end
+
   describe '#table_filter_filter_btn_tag' do
     let(:result_with_extra_data) do
       helper.table_filter_filter_btn_tag('active', 'Active', dimension: 'status', data: { custom: 'x' })
